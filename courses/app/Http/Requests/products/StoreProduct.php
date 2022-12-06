@@ -23,7 +23,11 @@ class StoreProduct extends FormRequest
             'image_product' => [
                 'bail',
                 'required',
-                'string',
+                'image',
+                'file_extension: jpg,png,jpeg',
+                'mimes: jpg,png,jpeg',
+                'mimetypes: image/jpeg,image/png,image/jpg',
+                'max:10048',
             ],
             'price_product' => [
                 'bail',
@@ -40,17 +44,11 @@ class StoreProduct extends FormRequest
                 'required',
                 'string',
             ],
-            'status' => [
-                'bail',
-                'required',
-                'string',
-            ],
             'id_category' => [
                 'bail',
                 'required',
-                'string',
+                'integer',
             ],
-
         ];
     }
     public function messages(): array

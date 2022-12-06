@@ -25,18 +25,14 @@
                                 @method('PUT')
                                 <div class="form-group">
                                     <label for="" class="form-label">Trạng thái</label>
+                                    @foreach($arrStudentStatus as $option => $value)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="status" id="status1" value="0" {{ $category->status == 0 ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="status1">
-                                            Mở
+                                        <input class="form-check-input" type="radio" name="status" id="status{{ $value }}" value="{{ $value }}" {{ $category->status == 0 ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="status{{ $value }}">
+                                            {{ $option }}
                                         </label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="status" id="status2" value="1" {{ $category->status == 1 ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="status2">
-                                            Đóng
-                                        </label>
-                                    </div>
+                                    @endforeach
                                 </div>
                                 <div class="form-group">
                                     <label for="name_product" class="form-label">Tên sản phẩm</label>

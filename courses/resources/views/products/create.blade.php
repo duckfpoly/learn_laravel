@@ -1,5 +1,14 @@
 @extends('index')
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <section class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
@@ -11,7 +20,7 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="p-3 ">
-                            <form action="{{ route('products.store') }}" method="post" id="form-1">
+                            <form action="{{ route('products.store') }}" method="post" id="form-1" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="name_product" class="form-label">Tên sản phẩm</label>
@@ -24,7 +33,7 @@
                                     <div class="form-message text-danger mt-1"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="image_product" class="form-label">Ảnh sản phẩm</label>
+                                    <label class="form-label">Ảnh sản phẩm</label>
                                     <input type="file" name="image_product" id="image_product" class="form-control">
                                     <div class="form-message text-danger mt-1"></div>
                                 </div>
@@ -39,21 +48,21 @@
                                     <div class="form-message text-danger mt-1"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description_sort_product" class="form-label">Mô tả ngắn</label>
-                                    <input type="text" name="description_sort_product" id="description_sort_product" class="form-control" value="{{ old('description_sort_product') }}">
-                                    @if ($errors->has('description_sort_product'))
+                                    <label for="desc_sort_product" class="form-label">Mô tả ngắn</label>
+                                    <input type="text" name="desc_sort_product" id="desc_sort_product" class="form-control" value="{{ old('desc_sort_product') }}">
+                                    @if ($errors->has('desc_sort_product'))
                                         <div class="text-danger mt-3">
-                                            {{ $errors->first('description_sort_product') }}
+                                            {{ $errors->first('desc_sort_product') }}
                                         </div>
                                     @endif
                                     <div class="form-message text-danger mt-1"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="description_product" class="form-label">Mô tả</label>
-                                    <input type="text" name="description_product" id="description_product" class="form-control" value="{{ old('description_product') }}">
-                                    @if ($errors->has('description_product'))
+                                    <label for="desc_product" class="form-label">Mô tả</label>
+                                    <input type="text" name="desc_product" id="desc_product" class="form-control" value="{{ old('desc_product') }}">
+                                    @if ($errors->has('desc_product'))
                                         <div class="text-danger mt-3">
-                                            {{ $errors->first('description_product') }}
+                                            {{ $errors->first('desc_product') }}
                                         </div>
                                     @endif
                                     <div class="form-message text-danger mt-1"></div>
@@ -97,8 +106,8 @@
                     Validator.isRequired('#name_product', 'Vui lòng nhập tên khóa học'),
                     Validator.isRequired('#image_product', 'Vui lòng chọn ảnh sản phẩm'),
                     Validator.isRequired('#price_product', 'Vui lòng nhập giá sản phẩm'),
-                    Validator.isRequired('#description_sort_product', 'Vui lòng nhập mô tả ngắn sản phẩm'),
-                    Validator.isRequired('#description_product', 'Vui lòng nhập mô tả sản phẩm'),
+                    Validator.isRequired('#desc_sort_product', 'Vui lòng nhập mô tả ngắn sản phẩm'),
+                    Validator.isRequired('#desc_product', 'Vui lòng nhập mô tả sản phẩm'),
                     Validator.isRequired('#id_category ', 'Vui lòng chọn danh mục sản phẩm'),
                 ]
             })

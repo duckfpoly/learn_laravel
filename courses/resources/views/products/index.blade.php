@@ -1,17 +1,19 @@
 @extends('index')
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <section class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
+                @if ($errors->any())
+                    <div class="alert alert-danger text-white text-center ">
+                        <p>{{ $error }}</p>
+                    </div>
+                @endif
+                @if (session()->has('success'))
+                    <div class="alert alert-success text-white text-center ">
+                        <p>{{ session()->has('success') }}</p>
+                    </div>
+                @endif
+
                 <div class="card mb-4">
                     <div class="card-header pb-3">
                         <div class="d-flex justify-content-between align-items-center">
@@ -60,13 +62,13 @@
                                         </span>
                                         </td>
                                         <td class="align-middle text-center d-flex justify-content-center align-items-center">
-{{--                                            <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-primary m-0" href="{{ route('products.show', $values) }}">Chi tiết</a></span>&emsp;--}}
+                                            <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-info m-0" href="{{ route('products.show', $values) }}">Chi tiết</a></span>&emsp;
                                             <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-secondary m-0" href="{{ route('products.edit', $values) }}">Sửa</a></span>&emsp;
                                             <span class="text-secondary text-xs font-weight-bold">
                                             <form action="{{ route('products.destroy', $values) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button onclick="return confirm('Bạn muốn xóa khóa học {{ $values->name_course }} ?')" class="btn btn-danger m-0">Xóa</button>
+                                                <button onclick="return confirm('Bạn muốn xóa sản phẩm {{ $values->name_product }} ?')" class="btn btn-danger m-0">Xóa</button>
                                             </form>
                                         </span>
                                         </td>

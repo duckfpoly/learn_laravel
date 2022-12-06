@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\products;
 
+use App\Enums\ProductsStatusEnum;
+use App\Models\categories;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProduct extends FormRequest
 {
@@ -31,12 +34,14 @@ class UpdateProduct extends FormRequest
             'status' => [
                 'bail',
                 'required',
-                'int',
+                'integer',
+                Rule::in(ProductsStatusEnum::asArray()),
             ],
             'id_category' => [
                 'bail',
                 'required',
-                'int',
+                'integer',
+                Rule::exists(categories::class,'id'),
             ],
         ];
     }

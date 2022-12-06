@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ProductsStatusEnum;
 use App\Http\Requests\products\DestroyProduct;
 use App\Http\Requests\products\StoreProduct;
 use App\Http\Requests\products\UpdateProduct;
@@ -23,7 +24,9 @@ class ProductsController extends Controller
         $arr        = explode('.', $route_name);
         $str        = array_map('ucfirst', $arr);
         $title      = implode('  /  ', $str);
+        $arrStudentStatus = ProductsStatusEnum::getStatusProduct();
         View::share('title', $title);
+        View::share('arrStudentStatus', $arrStudentStatus);
     }
     public function index(Request $request)
     {
@@ -39,6 +42,7 @@ class ProductsController extends Controller
             'search' => $search,
         ]);
     }
+
     public function create(){
         $cate = $this->cate->get();
         return view('products.create',[
@@ -47,16 +51,21 @@ class ProductsController extends Controller
     }
 
     public function store(StoreProduct $request){
-        dd($request);
+        $generate = 'image_product'.time().'-'.$request->name_product.'.'.$request->image_product->extension();
+        $request->image_product->move(public_path('images/products'),$generate);
+
+
+
         $this->model->create($request->validated());
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success','Create Successfully !');
     }
 
     public function show(Products $product)
     {
+        dd($product);
         $cate = $this->cate->find($product->id_category);
         $product->name_category = $cate->name_category;
-        return view('categories.detail',[
+        return view('products.detail',[
             'category' => $product,
         ]);
     }
@@ -78,11 +87,13 @@ class ProductsController extends Controller
         $object
             ->fill($request->validated())
             ->save();
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success','Update Successfully !');
     }
 
-    public function destroy(DestroyProduct $request, Products $products)
+    public function destroy(DestroyProduct $request, $productId)
     {
-        //
+        $this->model->find($productId)->delete();
+//        $this->model->where('id',$categoryId)->delete();
+        return redirect()->route('products.index')->with('success','Delete Successfully !');
     }
 }
