@@ -10,12 +10,14 @@ use App\Models\categories;
 use App\Models\Products;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
     private Builder $model;
+
     public function __construct()
     {
         $this->model = (new Products())->query();
@@ -51,23 +53,21 @@ class ProductsController extends Controller
     }
 
     public function store(StoreProduct $request){
-        $generate = 'image_product'.time().'-'.$request->name_product.'.'.$request->image_product->extension();
-        $request->image_product->move(public_path('images/products'),$generate);
-
-
-
-        $this->model->create($request->validated());
+        $path = Storage::disk('public')->putFile('products',$request->file('image_product'));
+        $arr = $request->validated();
+        $arr['image_product'] = $path;
+        $this->model->create($arr);
         return redirect()->route('products.index')->with('success','Create Successfully !');
     }
 
     public function show(Products $product)
     {
         dd($product);
-        $cate = $this->cate->find($product->id_category);
-        $product->name_category = $cate->name_category;
-        return view('products.detail',[
-            'category' => $product,
-        ]);
+//        $cate = $this->cate->find($product->id_category);
+//        $product->name_category = $cate->name_category;
+//        return view('products.detail',[
+//            'category' => $product,
+//        ]);
     }
 
     public function edit(Products $product)

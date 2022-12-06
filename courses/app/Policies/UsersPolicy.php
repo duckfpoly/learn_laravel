@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Course;
 use App\Models\User;
+use App\Models\Users;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CoursePolicy
+class UsersPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class CoursePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Users  $users
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Course $course)
+    public function view(User $user, Users $users)
     {
         //
     }
@@ -48,10 +48,10 @@ class CoursePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Users  $users
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Course $course)
+    public function update(User $user, Users $users)
     {
         //
     }
@@ -60,10 +60,10 @@ class CoursePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Users  $users
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Course $course)
+    public function delete(User $user, Users $users)
     {
         //
     }
@@ -72,10 +72,10 @@ class CoursePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Users  $users
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Course $course)
+    public function restore(User $user, Users $users)
     {
         //
     }
@@ -84,10 +84,10 @@ class CoursePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Course  $course
+     * @param  \App\Models\Users  $users
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Course $course)
+    public function forceDelete(User $user, Users $users)
     {
         //
     }

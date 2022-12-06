@@ -10,10 +10,9 @@
                 @endif
                 @if (session()->has('success'))
                     <div class="alert alert-success text-white text-center ">
-                        <p>{{ session()->has('success') }}</p>
+                        <p>{{ session()->get('success') }}</p>
                     </div>
                 @endif
-
                 <div class="card mb-4">
                     <div class="card-header pb-3">
                         <div class="d-flex justify-content-between align-items-center">
@@ -34,6 +33,7 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên sản phẩm</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ảnh sản phẩm</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Đơn giá</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Trạng thái</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thao tác</th>
@@ -52,11 +52,13 @@
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">{{ $values->name_product }}</p>
                                         </td>
+                                        <td>
+                                            <img src="{{ asset('storage/'.$values->image_product) }}" width="50px" height="50px" alt="">
+                                        </td>
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold">{{ $values->money_format }}</span>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-
                                         <span class="badge badge-sm bg-gradient-{{ $values->status  == 0 ? 'success' : 'danger' }}">
                                             {{ $values->status == 0 ? 'Mở' : 'Đóng' }}
                                         </span>

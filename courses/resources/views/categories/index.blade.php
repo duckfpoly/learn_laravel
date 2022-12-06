@@ -32,7 +32,9 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên danh mục</th>
+                                    @if(session()->get('role') === 1)
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thao tác</th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -48,6 +50,7 @@
                                             <td>
                                                 <p class="text-xs font-weight-bold mb-0">{{ $values->name_category }}</p>
                                             </td>
+                                            @if(session()->get('role') === 1)
                                             <td class="align-middle text-center d-flex justify-content-center align-items-center">
                                                 <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-secondary m-0" href="{{ route('categories.edit', $values) }}">Sửa</a></span>&emsp;
                                                 <span class="text-secondary text-xs font-weight-bold">
@@ -58,6 +61,7 @@
                                             </form>
                                         </span>
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
