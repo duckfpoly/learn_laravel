@@ -26,4 +26,9 @@ class AuthController extends Controller
         }
     }
 
+    public function logout(){
+        // xóa toàn bộ
+        session()->flush();
+        return redirect()->route('login');
+    }
 }

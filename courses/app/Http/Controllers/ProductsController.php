@@ -30,6 +30,7 @@ class ProductsController extends Controller
         View::share('title', $title);
         View::share('arrStudentStatus', $arrStudentStatus);
     }
+
     public function index(Request $request)
     {
         $search = $request->get('s');
@@ -37,11 +38,10 @@ class ProductsController extends Controller
             ->where('name_product', 'like', value: '%'.$search.'%')
             ->paginate(5)
             ->appends(['s' => $search]);
-//        $cate = $this->cate->find($data->id_category);
-//        $data->name_category = $cate->name_category;
         return view('products.index',[
-            'data' => $data,
-            'search' => $search,
+            'data'      => $data,
+            'search'    => $search,
+            'cate'      => $this->cate,
         ]);
     }
 
@@ -62,8 +62,9 @@ class ProductsController extends Controller
 
     public function show(Products $product)
     {
-        dd($product);
-//        $cate = $this->cate->find($product->id_category);
+//        dd($product);
+        $cate = $this->cate->find($product->id_category);
+        dd($cate->name_category);
 //        $product->name_category = $cate->name_category;
 //        return view('products.detail',[
 //            'category' => $product,

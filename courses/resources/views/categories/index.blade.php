@@ -18,66 +18,126 @@
                             <h6>Danh sách danh mục</h6>
                             <div class="d-flex align-items-center">
                                 <a class="btn btn-success m-0" href="{{ route('categories.create') }}">Thêm</a>
-                                &emsp;
-                                <form>
-                                    <input type="search" name="s" value="{{ $search }}" placeholder="Tìm kiếm ..." class="form-control">
-                                </form>
                             </div>
                         </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
-                        <div class="table-responsive p-2">
-                            <table class="table align-items-center " id="example">
+                        <div class="table-responsive p-5">
+                            <input hidden value="{{ route('categories.api') }}" id="categoriesData">
+                            <table class="table align-items-center justify-content-center" id="example">
                                 <thead>
-                                <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên danh mục</th>
-                                    @if(session()->get('role') === 1)
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thao tác</th>
-                                    @endif
-                                </tr>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">#</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên danh mục</th>
+                                        @if(CheckAdminLoginMiddleware())
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sửa</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Xóa</th>
+                                        @endif
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($data as $values)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $values->id }}</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $values->name_category }}</p>
-                                            </td>
-                                            @if(session()->get('role') === 1)
-                                            <td class="align-middle text-center d-flex justify-content-center align-items-center">
-                                                <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-secondary m-0" href="{{ route('categories.edit', $values) }}">Sửa</a></span>&emsp;
-                                                <span class="text-secondary text-xs font-weight-bold">
-                                            <form action="{{ route('categories.destroy', $values) }}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button onclick="return confirm('Bạn muốn xóa danh mục{{ $values->name_category }} ?')" class="btn btn-danger m-0">Xóa</button>
-                                            </form>
-                                        </span>
-                                            </td>
-                                            @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="pagination pagination-rounded mb-0 text-light">
-            {{ $data->links() }}
-        </div>
     </section>
-    <style>
-        .page-item.active > span {
-            color: #fff;
-        }
-    </style>
 @endsection('content')
+@push('datatable')
+    <script>
+        var buttonCommon = {
+            exportOptions: {
+                columns: ':visible :not(.not-export)'
+            }
+        };
+        $(function () {
+            var urlData = $('#categoriesData').val();
+            let myTable = $('#example').DataTable({
+                "lengthMenu": [2, 5, 15, 25, 50, 100],
+                language: {
+                    paginate: {
+                        previous: '<span class="prev-icon"><</span>',
+                        next: '<span class="next-icon">></span>',
+                    },
+                    lengthMenu: "_MENU_",
+                },
+                dom: "Blfrtip",
+                buttons: [
+                    $.extend( true, {}, buttonCommon, {
+                        extend: 'print'
+                    } ),
+                    $.extend( true, {}, buttonCommon, {
+                        extend: 'csvHtml5'
+                    } ),
+                    $.extend( true, {}, buttonCommon, {
+                        extend: 'pdfHtml5'
+                    } )
+                ],
+                processing: true,
+                serverSide: true,
+                ajax: urlData,
+                columnDefs: [{
+                    className   : "not-export",
+                    targets     : [ 2 , 3],
+                }],
+                info: true,
+                responsive: true,
+                columns: [
+                    { data: 'id', name: '#' },
+                    { data: 'name_category', name: 'Tên danh mục' },
+                    {
+                        data: 'edit',
+                        name: 'Sửa',
+                        orderable: false,
+                        searchable: false,
+                        targets: 2,
+                        render: function ( data, type, row, meta ) {
+                            return `
+                                <span class="text-secondary text-xs font-weight-bold">
+                                    <a class="btn btn-secondary m-0" href="${data}">Sửa</a>
+                                </span>&emsp;
+                            `
+                        }
+                    },
+                    {
+                        data: 'destroy',
+                        name: 'Xóa',
+                        orderable: false,
+                        searchable: false,
+                        targets: 2,
+                        render: function ( data, type, row, meta ) {
+                            return `
+                               <form action="${data}" method="post" onsubmit="return false">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn-delete btn btn-danger m-0">Xóa</button>
+                                </form>
+                            `
+                        }
+                    },
+                ],
+            });
+            $(document).on('click','.btn-delete',function (){
+                let text = "Bạn muốn xóa danh mục này ?";
+                if (confirm(text) == true) {
+                    let form = $(this).parents('form')
+                    $.ajax({
+                        type: "POST",
+                        url: form.attr('action'),
+                        datatype: 'json',
+                        data: form.serialize(),
+                        success:function () {
+                            showToast('Success', 'Delete Successfully !', 'success')
+                            myTable.draw()
+                        },
+                        error:function () {
+                            console.log('error')
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+{{--    <script src="{{ asset('js/items/datatableCategories.js') }}"></script>--}}
+@endpush

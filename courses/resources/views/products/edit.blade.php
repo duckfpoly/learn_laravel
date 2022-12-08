@@ -27,7 +27,7 @@
                                     <label for="" class="form-label">Trạng thái</label>
                                     @foreach($arrStudentStatus as $option => $value)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="status" id="status{{ $value }}" value="{{ $value }}" {{ $category->status == 0 ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="radio" name="status" id="status{{ $value }}" value="{{ $value }}" {{ $category->status == $value ? 'checked' : '' }}>
                                         <label class="form-check-label" for="status{{ $value }}">
                                             {{ $option }}
                                         </label>

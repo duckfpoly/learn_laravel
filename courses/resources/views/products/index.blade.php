@@ -35,6 +35,7 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên sản phẩm</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ảnh sản phẩm</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Đơn giá</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Danh mục</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Trạng thái</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thao tác</th>
                                 </tr>
@@ -58,14 +59,21 @@
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold">{{ $values->money_format }}</span>
                                         </td>
+                                        <td class="align-middle text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">{{ $cate->find($values->id_category)->name_category }}</span>
+                                        </td>
                                         <td class="align-middle text-center text-sm">
                                         <span class="badge badge-sm bg-gradient-{{ $values->status  == 0 ? 'success' : 'danger' }}">
                                             {{ $values->status == 0 ? 'Mở' : 'Đóng' }}
                                         </span>
                                         </td>
                                         <td class="align-middle text-center d-flex justify-content-center align-items-center">
-                                            <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-info m-0" href="{{ route('products.show', $values) }}">Chi tiết</a></span>&emsp;
-                                            <span class="text-secondary text-xs font-weight-bold"><a class="btn btn-secondary m-0" href="{{ route('products.edit', $values) }}">Sửa</a></span>&emsp;
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                <a class="btn btn-info m-0" href="{{ route('products.show', $values) }}">Chi tiết</a>
+                                            </span>&emsp;
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                <a class="btn btn-secondary m-0" href="{{ route('products.edit', $values) }}">Sửa</a>
+                                            </span>&emsp;
                                             <span class="text-secondary text-xs font-weight-bold">
                                             <form action="{{ route('products.destroy', $values) }}" method="post">
                                                 @csrf

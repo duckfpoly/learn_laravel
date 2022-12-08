@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\categories\CategoriesController;
 use App\Http\Controllers\ProductsController;
@@ -11,16 +10,17 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('process_login');
 
 Route::group(['middleware' => CheckLoginMiddleware::class],function (){
+    Route::get('categories/api', [CategoriesController::class, 'api'])->name('categories.api');
     Route::get('/', function (){ return view('index'); })->name('home');
-    Route::resource('categories',CategoriesController::class)->except(['edit','update','destroy']);
-    Route::resource('products', ProductsController::class)->except(['edit','update','destroy']);
-});
-
-Route::group(['middleware' => CheckAdminLoginMiddleware::class],function (){
-    Route::get('/', function (){ return view('index'); })->name('home');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::resource('categories',CategoriesController::class);
     Route::resource('products', ProductsController::class);
 });
 
-
+Route::group(['middleware' => CheckAdminLoginMiddleware::class],function (){
+    Route::get('categories/api', [CategoriesController::class, 'api'])->name('categories.api');
+    Route::get('/', function (){ return view('index'); })->name('home');
+    Route::resource('categories',CategoriesController::class);
+    Route::resource('products', ProductsController::class);
+});
 
