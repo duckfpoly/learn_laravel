@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('toast/toast.css') }}">
     <script src="{{ asset('toast/toast.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <style>
         .dt-buttons {
             /*float: right !important;*/
@@ -82,7 +83,7 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js">             </script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js">             </script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.colVis.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     @stack('validate')
     @stack('datatable')
 </body>

@@ -16,9 +16,14 @@
                     <div class="card-header pb-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6>Danh sách danh mục</h6>
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <select id="select_name" style="width: 500px"></select>
+                                </div>
+                                &emsp;
                                 <a class="btn btn-success m-0" href="{{ route('categories.create') }}">Thêm</a>
                             </div>
+
                         </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
@@ -46,12 +51,36 @@
 @endsection('content')
 @push('datatable')
     <script>
-        var buttonCommon = {
-            exportOptions: {
-                columns: ':visible :not(.not-export)'
-            }
-        };
         $(function () {
+            $("#select_name").select2({
+                ajax: {
+                    url: "{{ route('categories.api.name') }}",
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            q: params.term,
+                        };
+                    },
+                    processResults: function (data, params) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.name_category,
+                                    id: item.id,
+                                };
+                            })
+                        }
+                    },
+                    // cache: true
+                },
+                minimumInputLength: 1,
+                placeholder: 'Tìm kiếm tên danh mục',
+            });
+            var buttonCommon = {
+                exportOptions: {
+                    columns: ':visible :not(.not-export)'
+                }
+            };
             var urlData = $('#categoriesData').val();
             let myTable = $('#example').DataTable({
                 "lengthMenu": [2, 5, 15, 25, 50, 100],
@@ -62,7 +91,7 @@
                     },
                     lengthMenu: "_MENU_",
                 },
-                dom: "Blfrtip",
+                dom: "Blrtip",
                 buttons: [
                     $.extend( true, {}, buttonCommon, {
                         extend: 'print'
@@ -74,18 +103,19 @@
                         extend: 'pdfHtml5'
                     } )
                 ],
+                // searching: true,
                 processing: true,
                 serverSide: true,
                 ajax: urlData,
                 columnDefs: [{
                     className   : "not-export",
-                    targets     : [ 2 , 3],
+                    targets     : [ 2 , 3 ],
                 }],
                 info: true,
                 responsive: true,
                 columns: [
-                    { data: 'id', name: '#' },
-                    { data: 'name_category', name: 'Tên danh mục' },
+                    { data: 'id', name: 'id' },
+                    { data: 'name_category', name: 'name_category' },
                     {
                         data: 'edit',
                         name: 'Sửa',
@@ -118,6 +148,12 @@
                     },
                 ],
             });
+            $('#select_name').change(function () {
+                myTable
+                    .columns(0)
+                    .search( this.value )
+                    .draw();
+            });
             $(document).on('click','.btn-delete',function (){
                 let text = "Bạn muốn xóa danh mục này ?";
                 if (confirm(text) == true) {
@@ -139,5 +175,4 @@
             })
         });
     </script>
-{{--    <script src="{{ asset('js/items/datatableCategories.js') }}"></script>--}}
 @endpush
